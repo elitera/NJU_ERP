@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nju.edu.erp.dao.ReceiptDao">
+
+    <insert id="saveSheet" useGeneratedKeys="true" keyProperty="id">
+        insert into receipt_sheet (id, supplier, seller, operator, total_amount, `state`, create_time)
+        values (#{id}, #{supplier}, #{seller}, #{operator}, #{totalAmount}, #{state}, #{createTime}) ;
+    </insert>
+
+    <update id="approval">
+        update receipt_sheet
+        set `state` = #{state}
+        where id = #{receiptId}
+    </update>
+
+    <select id="getLatestSheet" resultType="com.nju.edu.erp.model.po.ReceiptPO">
+        select * from receipt_sheet order by id desc limit 0,1 ;
+    </select>
+
+    <select id="findSheetIdByOperator" resultType="java.lang.String">
+        select id from receipt_sheet where operator = #{operator}
+    </select>
+
+    <select id="findSheetIdByTime" resultType="java.lang.String">
+        select id from receipt_sheet where create_time >= #{beginDate} and create_time &lt;= #{endDate}
+    </select>
+
+    <select id="findSheetIdBySomeConditions" resultType="java.lang.String">
+        SELECT id FROM receipt_sheet
+        WHERE 1 = 1
+        <if test="beginDate != null">
+            and create_time >= #{beginDate}
+        </if>
+        <if test="endDate != null">
+            and create_time &lt;= #{endDate}
+        </if>
+        <if test="customer != null">
+            and supplier = #{customer}
+        </if>
+        <if test="operator != null">
+            and operator = #{operator}
+        </if>
+    </select>
+
+    <select id="selectReceiptById" resultType="com.nju.edu.erp.model.po.ReceiptPO">
+        select * from receipt_sheet where id = #{id}
+    </select>
+
+    <!--    以下是参考代码-->
+    <!--    <insert id="saveBatchSheetContent" useGeneratedKeys="true" keyProperty="id">-->
+<!--        insert into sale_sheet_content (sale_sheet_id, pid, quantity, unit_price, total_price, remark) values-->
+<!--        <foreach collection="list" item="item" index="index" separator=",">-->
+<!--            (#{item.saleSheetId},#{item.pid},#{item.quantity},#{item.unitPrice},#{item.totalPrice},#{item.remark})-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+<!--    <update id="updateSheetState">-->
+<!--        update sale_sheet-->
+<!--        set state = #{state}-->
+<!--        where id = #{sheetId}-->
+<!--    </update>-->
+
+<!--    <update id="updateSheetStateOnPrev">-->
+<!--        update sale_sheet-->
+<!--        set state = #{state}-->
+<!--        where id = #{sheetId} and state = #{prev}-->
+<!--    </update>-->
+
+<!--    <select id="findAllSheet" resultType="com.nju.edu.erp.model.po.SaleSheetPO">-->
+<!--        select * from sale_sheet;-->
+<!--    </select>-->
+
+<!--    <select id="findContentBySheetId" resultType="com.nju.edu.erp.model.po.SaleSheetContentPO">-->
+<!--        select * from sale_sheet_content where sale_sheet_id = #{sheetId};-->
+<!--    </select>-->
+
+<!--    <select id="findSheetById" resultType="com.nju.edu.erp.model.po.SaleSheetPO">-->
+<!--        select * from sale_sheet where id = #{id};-->
+<!--    </select>-->
+
+<!--    <select id="findSheetByState" resultType="com.nju.edu.erp.model.po.SaleSheetPO">-->
+<!--        select * from sale_sheet where state = #{state};-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash;获取某个销售人员某段时间内消费总金额最大的客户(不考虑退货情况,销售单不需要审批通过,如果这样的客户有多个，仅保留一个)&ndash;&gt;-->
+<!--    <select id="getMaxAmountCustomerOfSalesmanByTime" resultType="com.nju.edu.erp.model.po.CustomerPurchaseAmountPO">-->
+<!--        select c.id as id,c.type as type,c.level as level,c.name as name,c.phone as phone,c.address as address,c.zipcode as zipcode,c.email as email,c.line_of_credit as line_of_credit,c.receivable as receivable,c.payable as payable,c.operator as operator,sum(s.final_amount) as total_final_amount-->
+<!--        from sale_sheet s,customer c-->
+<!--        where s.salesman=#{salesman} and s.create_time>=#{beginTime} and s.create_time&lt;=#{endTime} and s.supplier=c.id-->
+<!--        group by s.supplier-->
+<!--        order by total_final_amount-->
+<!--        limit 1;-->
+<!--    </select>-->
+
+    <resultMap id="ReceiptPO" type="com.nju.edu.erp.model.po.ReceiptPO">
+        <id column="id" property="id"/>
+        <result column="supplier" property="supplier"/>
+        <result column="seller" property="seller"/>
+        <result column="operator" property="operator"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="create_time" property="createTime"/>
+        <result column="state" property="state"/>
+    </resultMap>
+</mapper>

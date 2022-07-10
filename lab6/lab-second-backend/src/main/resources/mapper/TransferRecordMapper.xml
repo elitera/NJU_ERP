@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nju.edu.erp.dao.TransferRecordDao">
+
+    <insert id="saveBatchSheetContent" useGeneratedKeys="true" keyProperty="id">
+        insert into transfer_record (receipt_sheet_id, bank_account_name, transfer_amount, remark) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.receiptSheetId}, #{item.bankAccountName}, #{item.transferAmount}, #{item.remark})
+        </foreach>
+    </insert>
+
+    <select id="findTransferBySheetId" resultType="com.nju.edu.erp.model.po.TransferRecordPO">
+        select * from transfer_record where receipt_sheet_id = #{sheetId};
+    </select>
+
+    <!--    <update id="updateSheetState">-->
+    <!--        update sale_sheet-->
+    <!--        set state = #{state}-->
+    <!--        where id = #{sheetId}-->
+    <!--    </update>-->
+
+    <!--    <update id="updateSheetStateOnPrev">-->
+    <!--        update sale_sheet-->
+    <!--        set state = #{state}-->
+    <!--        where id = #{sheetId} and state = #{prev}-->
+    <!--    </update>-->
+
+    <!--    <select id="getLatestSheet" resultType="com.nju.edu.erp.model.po.SaleSheetPO">-->
+    <!--        select * from sale_sheet order by id desc limit 0,1 ;-->
+    <!--    </select>-->
+
+    <!--    <select id="findAllSheet" resultType="com.nju.edu.erp.model.po.SaleSheetPO">-->
+    <!--        select * from sale_sheet;-->
+    <!--    </select>-->
+
+    <!--    <select id="findSheetById" resultType="com.nju.edu.erp.model.po.SaleSheetPO">-->
+    <!--        select * from sale_sheet where id = #{id};-->
+    <!--    </select>-->
+
+    <!--    <select id="findSheetByState" resultType="com.nju.edu.erp.model.po.SaleSheetPO">-->
+    <!--        select * from sale_sheet where state = #{state};-->
+    <!--    </select>-->
+
+    <!--    &lt;!&ndash;获取某个销售人员某段时间内消费总金额最大的客户(不考虑退货情况,销售单不需要审批通过,如果这样的客户有多个，仅保留一个)&ndash;&gt;-->
+    <!--    <select id="getMaxAmountCustomerOfSalesmanByTime" resultType="com.nju.edu.erp.model.po.CustomerPurchaseAmountPO">-->
+    <!--        select c.id as id,c.type as type,c.level as level,c.name as name,c.phone as phone,c.address as address,c.zipcode as zipcode,c.email as email,c.line_of_credit as line_of_credit,c.receivable as receivable,c.payable as payable,c.operator as operator,sum(s.final_amount) as total_final_amount-->
+    <!--        from sale_sheet s,customer c-->
+    <!--        where s.salesman=#{salesman} and s.create_time>=#{beginTime} and s.create_time&lt;=#{endTime} and s.supplier=c.id-->
+    <!--        group by s.supplier-->
+    <!--        order by total_final_amount-->
+    <!--        limit 1;-->
+    <!--    </select>-->
+
+    <resultMap id="TransferRecordPO" type="com.nju.edu.erp.model.po.TransferRecordPO">
+        <id column="id" property="id"/>
+        <result column="receipt_sheet_id" property="receiptSheetId"/>
+        <result column="bank_account_name" property="bankAccountName"/>
+        <result column="transfer_amount" property="transferAmount"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+</mapper>

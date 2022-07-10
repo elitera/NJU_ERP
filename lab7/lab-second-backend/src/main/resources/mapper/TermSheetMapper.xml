@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nju.edu.erp.dao.TermSheetDao">
+
+    <insert id="saveBatchSheetContent" useGeneratedKeys="true" keyProperty="id">
+        insert into term_sheet_record (payment_order_id, `name`, money, remark) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.paymentOrderId}, #{item.name}, #{item.money}, #{item.remark})
+        </foreach>
+    </insert>
+
+    <select id="findTermSheetsBySheetId" resultType="com.nju.edu.erp.model.po.TermSheetPO">
+        select * from term_sheet_record where payment_order_id = #{id};
+    </select>
+
+    <!--    <select id="findTransferBySheetId" resultType="com.nju.edu.erp.model.po.TransferRecordPO">-->
+<!--        select * from transfer_record where receipt_sheet_id = #{sheetId};-->
+<!--    </select>-->
+
+    <resultMap id="TermSheetPO" type="com.nju.edu.erp.model.po.TermSheetPO">
+        <id column="id" property="id"/>
+        <result column="payment_order_id" property="paymentOrderId"/>
+        <result column="name" property="name"/>
+        <result column="money" property="money"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+</mapper>

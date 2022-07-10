@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nju.edu.erp.dao.PaymentOrderDao">
+
+    <insert id="saveSheet" useGeneratedKeys="true" keyProperty="id">
+        insert into payment_order_sheet (id, supplier, seller, operator, total_amount, `state`, create_time)
+        values (#{id}, #{supplier}, #{seller}, #{operator}, #{totalAmount}, #{state}, #{createTime}) ;
+    </insert>
+
+    <update id="approval">
+        UPDATE payment_order_sheet
+        SET `state` = #{state}
+        WHERE id = #{paymentOrderId}
+    </update>
+
+    <select id="getLatestSheet" resultType="com.nju.edu.erp.model.po.PaymentOrderPO">
+        select * from payment_order_sheet order by id desc limit 0,1 ;
+    </select>
+
+    <select id="findSheetIdByOperator" resultType="java.lang.String">
+        select id from payment_order_sheet where operator = #{operator}
+    </select>
+
+    <select id="findSheetIdByTime" resultType="java.lang.String">
+        select id from payment_order_sheet where create_time >= #{beginDate} and create_time &lt;= #{endDate}
+    </select>
+
+    <select id="findSheetIdBySomeConditions" resultType="java.lang.String">
+        SELECT id FROM payment_order_sheet
+        WHERE 1 = 1
+        <if test="beginDate != null">
+            and create_time >= #{beginDate}
+        </if>
+        <if test="endDate != null">
+            and create_time &lt;= #{endDate}
+        </if>
+        <if test="customer != null">
+            and supplier = #{customer}
+        </if>
+        <if test="operator != null">
+            and operator = #{operator}
+        </if>
+    </select>
+
+    <select id="findSheetById" resultType="com.nju.edu.erp.model.po.PaymentOrderPO">
+        SELECT * FROM payment_order_sheet WHERE id = #{id}
+    </select>
+
+    <resultMap id="PaymentOrderPO" type="com.nju.edu.erp.model.po.PaymentOrderPO">
+        <id column="id" property="id"/>
+        <result column="supplier" property="supplier"/>
+        <result column="seller" property="seller"/>
+        <result column="operator" property="operator"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="create_time" property="createTime"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+</mapper>

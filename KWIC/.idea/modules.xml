@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/8cb15ccdd835479d84207815b6d8b35c.iml" filepath="$PROJECT_DIR$/.idea/8cb15ccdd835479d84207815b6d8b35c.iml" />
+      <module fileurl="file://$PROJECT_DIR$/51-kwic-ms-index/KWIC-MS.iml" filepath="$PROJECT_DIR$/51-kwic-ms-index/KWIC-MS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/58-kwic-oo-all_lines-new/KWIC-OO.iml" filepath="$PROJECT_DIR$/58-kwic-oo-all_lines-new/KWIC-OO.iml" />
+    </modules>
+  </component>
+</project>

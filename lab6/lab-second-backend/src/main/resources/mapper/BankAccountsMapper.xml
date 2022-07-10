@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nju.edu.erp.dao.BankAccountDao">
+
+    <insert id="insertBankAccount">
+        INSERT INTO bank_account (bank_account_name, balance)
+        VALUES (#{bankAccountName}, #{balance})
+    </insert>
+
+    <update id="updateBankAccount">
+        update bank_account
+        <set>
+            <if test="balance != null and balance != ''">
+                balance = #{balance}
+            </if>
+            where bank_account_name = #{bankAccountName};
+        </set>
+    </update>
+
+    <delete id="deleteBankAccountByName">
+        DELETE FROM bank_account
+        WHERE bank_account_name = '${name}'
+    </delete>
+
+    <select id="selectBankAccountByName" resultType="com.nju.edu.erp.model.po.BankAccountPO">
+        SELECT * FROM bank_account
+        WHERE bank_account_name like '%${name}%'
+    </select>
+
+    <select id="selectAll" resultType="com.nju.edu.erp.model.vo.Financial.BankAccountVO">
+        Select * FROM bank_account
+    </select>
+
+    <resultMap id="BankAccountPO" type="com.nju.edu.erp.model.po.BankAccountPO">
+        <result column="bank_account_name" property="bankAccountName"/>
+        <result column="balance" property="balance"/>
+    </resultMap>
+
+</mapper>
